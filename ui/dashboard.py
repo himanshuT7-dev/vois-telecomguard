@@ -123,17 +123,26 @@ footer {
 
 /* -------------------------------------------------------------
    Full-Width Horizontal Navigation Bar (Centered Swiss-Grid)
+   Universal Streamlit Cloud & Local Compatibility
    ------------------------------------------------------------- */
 /* Remove vertical gap between terminal header and navbar */
 div[data-testid="stVerticalBlock"] > div:has(.terminal-header) {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
 }
+div[data-testid="stVerticalBlock"] > div:has(.st-key-top_nav_bar_radio),
 div[data-testid="stVerticalBlock"] > div:has(div[data-testid="stRadio"]) {
     margin-top: 0 !important;
     padding-top: 0 !important;
 }
-div[data-testid="element-container"]:has(div[data-testid="stRadio"]) {
+
+/* Ensure outer element container stretches 100% full-width across any Streamlit version */
+.st-key-top_nav_bar_radio,
+div[data-testid="stElementContainer"]:has(.st-key-top_nav_bar_radio),
+div[data-testid="stElementContainer"]:has(div[data-testid="stRadio"]),
+div[data-testid="element-container"]:has(.st-key-top_nav_bar_radio),
+div[data-testid="element-container"]:has(div[data-testid="stRadio"]),
+div.stRadio {
     width: 100% !important;
     max-width: 100% !important;
     margin-top: 0px !important;
@@ -142,6 +151,8 @@ div[data-testid="element-container"]:has(div[data-testid="stRadio"]) {
 }
 
 /* Outer navbar container: full-width white surface with 1px border */
+.st-key-top_nav_bar_radio div[data-testid="stRadio"],
+.st-key-top_nav_bar_radio .stRadio,
 div[data-testid="stRadio"] {
     width: 100% !important;
     max-width: 100% !important;
@@ -154,8 +165,11 @@ div[data-testid="stRadio"] {
     box-sizing: border-box !important;
 }
 
-/* Hide empty Streamlit widget label so it doesn't push down the radiogroup */
-div[data-testid="stRadio"] > label[data-testid="stWidgetLabel"] {
+/* Hide empty Streamlit widget label across ALL builds */
+.st-key-top_nav_bar_radio label[data-testid="stWidgetLabel"],
+.st-key-top_nav_bar_radio > div > label:first-child,
+div[data-testid="stRadio"] label[data-testid="stWidgetLabel"],
+div[data-testid="stRadio"] > label {
     display: none !important;
     height: 0 !important;
     width: 0 !important;
@@ -165,31 +179,35 @@ div[data-testid="stRadio"] > label[data-testid="stWidgetLabel"] {
 }
 
 /* Radiogroup flex container: CENTER the tabs horizontally across the full-width bar */
-div[data-testid="stRadio"] > div[role="radiogroup"] {
+.st-key-top_nav_bar_radio [role="radiogroup"],
+div[data-testid="stRadio"] div[role="radiogroup"],
+div[role="radiogroup"] {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important; /* ZERO WRAPPING */
     justify-content: center !important; /* CENTER ALIGN TABS */
     align-items: center !important;
     width: 100% !important;
+    max-width: 100% !important;
     height: 44px !important;
-    gap: 28px !important;
+    gap: 36px !important;
     background: transparent !important;
     border: none !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
     padding: 0 16px !important;
     box-sizing: border-box !important;
 }
 
-/* Each tab item: scope strictly to data-baseweb="radio" */
-div[data-testid="stRadio"] label[data-baseweb="radio"] {
+/* Each tab item: match ANY label inside role="radiogroup" (never rely solely on data-baseweb) */
+.st-key-top_nav_bar_radio [role="radiogroup"] label,
+div[data-testid="stRadio"] div[role="radiogroup"] label {
     flex: 0 0 auto !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     height: 44px !important;
     line-height: 44px !important;
-    padding: 0 12px !important;
+    padding: 0 14px !important;
     margin: 0 !important;
     background: transparent !important;
     border: none !important;
@@ -201,19 +219,31 @@ div[data-testid="stRadio"] label[data-baseweb="radio"] {
     transition: all 0.15s ease-in-out !important;
 }
 
-/* Hide the default radio circle indicator */
-div[data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {
+/* Hide the radio circle / dot indicator across ALL Streamlit Cloud & local builds */
+.st-key-top_nav_bar_radio [role="radiogroup"] label > div:first-child,
+.st-key-top_nav_bar_radio [role="radiogroup"] label input,
+.st-key-top_nav_bar_radio [role="radiogroup"] label [data-testid="stRadioOptionCircle"],
+.st-key-top_nav_bar_radio [role="radiogroup"] label svg,
+div[data-testid="stRadio"] [role="radiogroup"] label > div:first-child,
+div[data-testid="stRadio"] [role="radiogroup"] label input {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    position: absolute !important;
+    pointer-events: none !important;
 }
 
 /* Tab typography */
-div[data-testid="stRadio"] label[data-baseweb="radio"] p,
-div[data-testid="stRadio"] label[data-baseweb="radio"] span,
-div[data-testid="stRadio"] label[data-baseweb="radio"] div[data-testid="stMarkdownContainer"] {
+.st-key-top_nav_bar_radio [role="radiogroup"] label p,
+.st-key-top_nav_bar_radio [role="radiogroup"] label span,
+.st-key-top_nav_bar_radio [role="radiogroup"] label div[data-testid="stMarkdownContainer"],
+div[data-testid="stRadio"] [role="radiogroup"] label p,
+div[data-testid="stRadio"] [role="radiogroup"] label span,
+div[data-testid="stRadio"] [role="radiogroup"] label div[data-testid="stMarkdownContainer"] {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
     font-size: 0.76rem !important;
     font-weight: 600 !important;
@@ -228,25 +258,39 @@ div[data-testid="stRadio"] label[data-baseweb="radio"] div[data-testid="stMarkdo
 }
 
 /* Hover state */
-div[data-testid="stRadio"] label[data-baseweb="radio"]:hover p,
-div[data-testid="stRadio"] label[data-baseweb="radio"]:hover span {
+.st-key-top_nav_bar_radio [role="radiogroup"] label:hover p,
+.st-key-top_nav_bar_radio [role="radiogroup"] label:hover span,
+div[data-testid="stRadio"] [role="radiogroup"] label:hover p,
+div[data-testid="stRadio"] [role="radiogroup"] label:hover span {
     color: #0F172A !important;
 }
 
 /* Active tab state: sharp bold #0F172A text with 3px #E60000 crimson bottom border */
-div[data-testid="stRadio"] label[data-baseweb="radio"]:has(input:checked),
-div[data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"],
-div[data-testid="stRadio"] label[data-baseweb="radio"][data-checked="true"] {
+.st-key-top_nav_bar_radio [role="radiogroup"] label:has(input:checked),
+.st-key-top_nav_bar_radio [role="radiogroup"] label[aria-checked="true"],
+.st-key-top_nav_bar_radio [role="radiogroup"] label:has([aria-checked="true"]),
+.st-key-top_nav_bar_radio [role="radiogroup"] label[data-checked="true"],
+div[data-testid="stRadio"] [role="radiogroup"] label:has(input:checked),
+div[data-testid="stRadio"] [role="radiogroup"] label[aria-checked="true"],
+div[data-testid="stRadio"] [role="radiogroup"] label[data-checked="true"] {
     background: transparent !important;
     border-bottom: 3px solid #E60000 !important;
 }
 
-div[data-testid="stRadio"] label[data-baseweb="radio"]:has(input:checked) p,
-div[data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] p,
-div[data-testid="stRadio"] label[data-baseweb="radio"][data-checked="true"] p,
-div[data-testid="stRadio"] label[data-baseweb="radio"]:has(input:checked) span,
-div[data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] span,
-div[data-testid="stRadio"] label[data-baseweb="radio"][data-checked="true"] span {
+.st-key-top_nav_bar_radio [role="radiogroup"] label:has(input:checked) p,
+.st-key-top_nav_bar_radio [role="radiogroup"] label[aria-checked="true"] p,
+.st-key-top_nav_bar_radio [role="radiogroup"] label:has([aria-checked="true"]) p,
+.st-key-top_nav_bar_radio [role="radiogroup"] label[data-checked="true"] p,
+.st-key-top_nav_bar_radio [role="radiogroup"] label:has(input:checked) span,
+.st-key-top_nav_bar_radio [role="radiogroup"] label[aria-checked="true"] span,
+.st-key-top_nav_bar_radio [role="radiogroup"] label:has([aria-checked="true"]) span,
+.st-key-top_nav_bar_radio [role="radiogroup"] label[data-checked="true"] span,
+div[data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) p,
+div[data-testid="stRadio"] [role="radiogroup"] label[aria-checked="true"] p,
+div[data-testid="stRadio"] [role="radiogroup"] label[data-checked="true"] p,
+div[data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) span,
+div[data-testid="stRadio"] [role="radiogroup"] label[aria-checked="true"] span,
+div[data-testid="stRadio"] [role="radiogroup"] label[data-checked="true"] span {
     color: #0F172A !important;
     font-weight: 700 !important;
 }
